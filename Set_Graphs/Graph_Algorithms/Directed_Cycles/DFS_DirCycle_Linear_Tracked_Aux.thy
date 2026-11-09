@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Tracked_Aux
   imports DFS_Skeletons.DFS_Skeleton Directed_Set_Graphs.Component_Defs
 begin
 
+provenance ai_human
+
 
 text \<open>The pre-seeded directed-cycle DFS of \<open>DFS_dircycle_linear_Aux\<close>,
   rebuilt on \<^locale>\<open>DFS_skeleton\<close> so that the gray (on-stack) set and the complement of the
@@ -40,8 +42,12 @@ for lookup :: "'adjmap \<Rightarrow> 'v \<Rightarrow> 'vset option" +
 fixes G::"'adjmap" and s::"'v" and f::"'vset" and uf::"'vset"
 begin
 
+provenance human
+
 abbreviation "neighbourhood' \<equiv> Graph.neighbourhood G"
 notation "neighbourhood'" ("\<N>\<^sub>G _" 100)
+
+provenance ai_human
 
 text \<open>The point of the exercise: the back-edge test reads the incrementally maintained gray set,
   no set difference.\<close>
@@ -49,9 +55,13 @@ definition "cyc_found (dfs_state::('v,'vset) DFS_dircycle_linear_tracked_aux_sta
    (case stack dfs_state of [] \<Rightarrow> False
     | (v # stack_tl) \<Rightarrow> (((\<N>\<^sub>G v) \<inter>\<^sub>G (gray dfs_state)) \<noteq> \<emptyset>\<^sub>N))"
 
+provenance human
+
 definition "cyc_on_found (dfs_state::('v,'vset) DFS_dircycle_linear_tracked_aux_state) = (dfs_state \<lparr>cycle := True\<rparr>)"
 
 definition "cyc_on_empty (dfs_state::('v,'vset) DFS_dircycle_linear_tracked_aux_state) = dfs_state"
+
+provenance ai_human
 
 definition "cyc_on_push u (dfs_state::('v,'vset) DFS_dircycle_linear_tracked_aux_state) =
   (dfs_state \<lparr>gray := insert u (gray dfs_state)\<rparr>)"
@@ -121,6 +131,8 @@ sublocale dc: DFS_skeleton_thms
      (auto simp: dc.DFS_skeleton_axioms_def DFS_dircycle_linear_tracked_aux_axioms_def
                  cyc_on_found_def cyc_on_empty_def cyc_on_backtrack_def cyc_on_push_def)
 
+provenance human
+
 definition "invar_2 dfs_state = Vwalk.vwalk (Graph.digraph_abs G) (rev (stack dfs_state))"
 
 definition "invar_ssf dfs_state \<longleftrightarrow>
@@ -131,6 +143,8 @@ definition "invar_ssf dfs_state \<longleftrightarrow>
     \<and> t_set (seen dfs_state) \<subseteq> dVs (Graph.digraph_abs G)"
 
 definition "invar_fin dfs_state = vset_inv (finished dfs_state)"
+
+provenance ai_human
 
 text \<open>The gray set \<^emph>\<open>is\<close> the stack: this is what lets \<open>cyc_found\<close> stand in for the library's
   \<open>seen - finished\<close> test.\<close>
@@ -151,6 +165,8 @@ definition "invar_seed dfs_state \<longleftrightarrow>
     Set.insert s (t_set f) \<subseteq> t_set (seen dfs_state)
   \<and> t_set f \<subseteq> t_set (finished dfs_state)"
 
+provenance human
+
 definition "invar_cycle_true dfs_state =
     (cycle dfs_state \<longrightarrow> (\<exists>c. Awalk_Defs.cycle (Graph.digraph_abs G) c))"
 
@@ -164,7 +180,11 @@ context
 includes set_ops.automation2 and Graph.adjmap.automation and Graph.vset.set.automation
 begin
 
+provenance ai_human
+
 subsection \<open>The invariants hold at the seeded initial state\<close>
+
+provenance human
 
 lemma initial_invars[simp,intro]:
   "dc.invar_1 dircycle_tracked_initial_state"
@@ -173,8 +193,12 @@ lemma initial_invars[simp,intro]:
   by (auto simp: dc.invar_1_def dc.invar_seen_stack_def dircycle_tracked_initial_state_def
                  DFS_dircycle_linear_tracked_aux_axioms_def)
 
+provenance ai_human
+
 lemma dircycle_tracked_initial_dom: "dc.DFS_skeleton_dom dircycle_tracked_initial_state"
   by (intro dc.DFS_skeleton_terminates initial_invars)
+
+provenance human
 
 lemma initial_struct[simp,intro]:
   "invar_2 dircycle_tracked_initial_state"
@@ -184,8 +208,10 @@ lemma initial_struct[simp,intro]:
                  DFS_dircycle_linear_tracked_aux_axioms_def)
 
 lemma initial_fin[simp,intro]: "invar_fin dircycle_tracked_initial_state"
-  using dircycle_tracked_axioms[unfolded DFS_dircycle_linear_tracked_aux_axioms_def]
-  by (simp add: invar_fin_def dircycle_tracked_initial_state_def)
+  using \<^marker>\<open>provenance ai_human\<close> dircycle_tracked_axioms[unfolded DFS_dircycle_linear_tracked_aux_axioms_def]
+  by \<^marker>\<open>provenance ai_human\<close> (simp add: invar_fin_def dircycle_tracked_initial_state_def)
+
+provenance ai_human
 
 lemma initial_gray[simp,intro]: "invar_gray dircycle_tracked_initial_state"
   by (auto simp: invar_gray_def dircycle_tracked_initial_state_def)
@@ -206,12 +232,16 @@ lemma initial_seed[simp,intro]: "invar_seed dircycle_tracked_initial_state"
   by (auto simp: invar_seed_def dircycle_tracked_initial_state_def
                  DFS_dircycle_linear_tracked_aux_axioms_def)
 
+provenance human
+
 lemma initial_fc[simp,intro]:
   "invar_finished_closed dircycle_tracked_initial_state"
   "invar_cycle_false dircycle_tracked_initial_state"
-  using dircycle_tracked_axioms[unfolded DFS_dircycle_linear_tracked_aux_axioms_def]
-  by (auto simp: invar_finished_closed_def invar_cycle_false_def
+  using \<^marker>\<open>provenance ai_human\<close> dircycle_tracked_axioms[unfolded DFS_dircycle_linear_tracked_aux_axioms_def]
+  by \<^marker>\<open>provenance ai_human\<close> (auto simp: invar_finished_closed_def invar_cycle_false_def
                  dircycle_tracked_initial_state_def)
+
+provenance ai_human
 
 subsection \<open>The step functions, explicitly\<close>
 
@@ -234,6 +264,8 @@ lemma upd2_unfold:
   by (auto simp: dc.DFS_skeleton_upd2_def cyc_on_backtrack_def)
 
 subsection \<open>Structural invariants\<close>
+
+provenance human
 
 lemma invar_fin_props[invar_props_elims]:
   "invar_fin dfs_state \<Longrightarrow> (vset_inv (finished dfs_state) \<Longrightarrow> P) \<Longrightarrow> P"
@@ -282,7 +314,7 @@ lemma invar_2_holds_upd1[invar_holds_intros]:
   assumes "dc.DFS_skeleton_call_1_conds dfs_state" "dc.invar_1 dfs_state" "invar_2 dfs_state"
   shows "invar_2 (dc.DFS_skeleton_upd1 dfs_state)"
   using assms dc.graph_inv
-  by (force simp: upd1_unfold elim!: call_cond_elims
+  by \<^marker>\<open>provenance ai_human\<close> (force simp: upd1_unfold elim!: call_cond_elims
             elim!: invar_props_elims intro!: Vwalk.vwalk_append2 invar_props_intros)
 
 lemma invar_2_holds_upd2[invar_holds_intros]:
@@ -406,6 +438,8 @@ proof(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
     apply(rule dc.DFS_skeleton_cases[where dfs_state = dfs_state])
     by (auto intro!: IH(2-) invar_holds_intros simp: dc.DFS_skeleton_simps[OF IH(1)])
 qed
+
+provenance ai_human
 
 subsection \<open>The gray set is the stack\<close>
 
@@ -755,6 +789,8 @@ proof(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
   qed
 qed
 
+provenance human
+
 subsection \<open>Soundness: a reported cycle is a real directed cycle\<close>
 
 lemma invar_cycle_true_props[invar_props_elims]:
@@ -778,9 +814,13 @@ lemma invar_cycle_true_holds_ret_1[invar_holds_intros]:
   "\<lbrakk>dc.DFS_skeleton_ret_1_conds dfs_state; invar_cycle_true dfs_state\<rbrakk> \<Longrightarrow> invar_cycle_true (dc.DFS_skeleton_ret1 dfs_state)"
   by (auto simp: dc.DFS_skeleton_ret1_def cyc_on_empty_def elim!: invar_props_elims intro!: invar_props_intros)
 
+provenance ai_human
+
 text \<open>The found-hook fires on a nonempty \<open>(\<N>\<^sub>G v) \<inter>\<^sub>G gray\<close>; via \<open>invar_gray_stack\<close> the witness
   is a neighbour \<^emph>\<open>on the stack\<close>, and the stack prefix up to it closes into a cycle exactly as in
   the library's proof.\<close>
+provenance human
+
 lemma invar_cycle_true_holds_ret_2[invar_holds_intros]:
   assumes "dc.DFS_skeleton_ret_2_conds dfs_state" "dc.invar_1 dfs_state" "invar_fin dfs_state"
           "invar_2 dfs_state" "invar_ssf dfs_state" "invar_gray dfs_state"
@@ -788,19 +828,19 @@ lemma invar_cycle_true_holds_ret_2[invar_holds_intros]:
   shows "invar_cycle_true (dc.DFS_skeleton_ret2 dfs_state)"
 proof (intro invar_props_intros)
   let ?v = "hd (stack dfs_state)"
-  have ne: "(\<N>\<^sub>G ?v) \<inter>\<^sub>G (gray dfs_state) \<noteq> \<emptyset>\<^sub>N"
+  have \<^marker>\<open>provenance ai_human\<close> ne: "(\<N>\<^sub>G ?v) \<inter>\<^sub>G (gray dfs_state) \<noteq> \<emptyset>\<^sub>N"
    and stk: "stack dfs_state \<noteq> []"
     using assms(1) by (auto simp: dc.DFS_skeleton_ret_2_conds_def cyc_found_def split: list.splits)
-  have ginv: "vset_inv (gray dfs_state)"
+  have \<^marker>\<open>provenance ai_human\<close> ginv: "vset_inv (gray dfs_state)"
     using assms(6) by (auto simp: invar_gray_def)
-  have geq: "t_set (gray dfs_state) = set (stack dfs_state)"
+  have \<^marker>\<open>provenance ai_human\<close> geq: "t_set (gray dfs_state) = set (stack dfs_state)"
     using assms(7) by (auto simp: invar_gray_stack_def)
-  have ninv: "vset_inv (\<N>\<^sub>G ?v)" using dc.graph_inv by auto
-  have iinv: "vset_inv ((\<N>\<^sub>G ?v) \<inter>\<^sub>G (gray dfs_state))"
+  have \<^marker>\<open>provenance ai_human\<close> ninv: "vset_inv (\<N>\<^sub>G ?v)" using dc.graph_inv by auto
+  have \<^marker>\<open>provenance ai_human\<close> iinv: "vset_inv ((\<N>\<^sub>G ?v) \<inter>\<^sub>G (gray dfs_state))"
     using ninv ginv by auto
-  obtain x where x_mem: "x \<in> t_set ((\<N>\<^sub>G ?v) \<inter>\<^sub>G (gray dfs_state))"
+  obtain \<^marker>\<open>provenance ai_human\<close> x where x_mem: "x \<in> t_set ((\<N>\<^sub>G ?v) \<inter>\<^sub>G (gray dfs_state))"
     using ne iinv by (force dest!: Graph.vset.choose')
-  have xN: "x \<in> t_set (\<N>\<^sub>G ?v)"
+  have \<^marker>\<open>provenance ai_human\<close> xN: "x \<in> t_set (\<N>\<^sub>G ?v)"
    and xstack: "x \<in> set (stack dfs_state)"
     using x_mem ninv ginv geq by auto
   have edge: "(?v, x) \<in> Graph.digraph_abs G"
@@ -863,7 +903,7 @@ lemma invar_cycle_true_holds[invar_holds_intros]:
           "invar_gray_stack dfs_state" "invar_cycle_true dfs_state"
   shows "invar_cycle_true (dc.DFS_skeleton dfs_state)"
   using assms(2-)
-proof(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
+proof \<^marker>\<open>provenance ai_human\<close>(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
   case IH: (1 dfs_state)
   note simps = dc.DFS_skeleton_simps[OF IH(1)]
   show ?case
@@ -907,7 +947,7 @@ theorem DFS_dircycle_linear_tracked_aux_sound:
   shows "\<exists>c. Awalk_Defs.cycle (Graph.digraph_abs G) c"
 proof -
   have "invar_cycle_true (dc.DFS_skeleton dircycle_tracked_initial_state)"
-    by (intro invar_cycle_true_holds dircycle_tracked_initial_dom initial_invars
+    by \<^marker>\<open>provenance ai_human\<close> (intro invar_cycle_true_holds dircycle_tracked_initial_dom initial_invars
               initial_fin initial_struct initial_gray initial_gray_stack)
        (auto simp: invar_cycle_true_def dircycle_tracked_initial_state_def)
   thus ?thesis using assms by (auto elim!: invar_props_elims)
@@ -925,15 +965,19 @@ lemma invar_finished_closed_intro[invar_props_intros]:
     \<Longrightarrow> invar_finished_closed dfs_state"
   by (auto simp: invar_finished_closed_def)
 
+provenance ai_human
+
 text \<open>Out-neighbours of the popped vertex are all already finished: none is unseen (else
   \<open>call_1\<close> would fire), none is gray (else \<open>cyc_found\<close> would fire), and via \<open>invar_gray_stack\<close> +
   \<open>invar_ssf\<close> non-gray seen vertices are finished.\<close>
+provenance human
+
 lemma upd2_vout:
   assumes "dc.DFS_skeleton_call_2_conds dfs_state" "dc.invar_1 dfs_state" "invar_fin dfs_state"
           "invar_ssf dfs_state" "invar_gray dfs_state" "invar_gray_stack dfs_state"
     and "(hd (stack dfs_state), w) \<in> Graph.digraph_abs G"
   shows "w \<in> t_set (finished dfs_state)"
-proof -
+proof \<^marker>\<open>provenance ai_human\<close> -
   let ?v = "hd (stack dfs_state)"
   have sinv: "vset_inv (seen dfs_state)" using assms(2) by (auto simp: dc.invar_1_def)
   have ginv: "vset_inv (gray dfs_state)" using assms(5) by (auto simp: invar_gray_def)
@@ -1013,7 +1057,7 @@ lemma invar_finished_closed_holds[invar_holds_intros]:
           "invar_finished_closed dfs_state"
   shows "invar_finished_closed (dc.DFS_skeleton dfs_state)"
   using assms(2-)
-proof(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
+proof \<^marker>\<open>provenance ai_human\<close>(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
   case IH: (1 dfs_state)
   note simps = dc.DFS_skeleton_simps[OF IH(1)]
   show ?case
@@ -1162,23 +1206,27 @@ qed
 
 lemma invar_cycle_false_holds_ret_1[invar_holds_intros]:
   "\<lbrakk>dc.DFS_skeleton_ret_1_conds dfs_state; invar_cycle_false dfs_state\<rbrakk> \<Longrightarrow> invar_cycle_false (dc.DFS_skeleton_ret1 dfs_state)"
-  by (simp add: dc.DFS_skeleton_ret1_def cyc_on_empty_def)
+  by \<^marker>\<open>provenance ai_human\<close> (simp add: dc.DFS_skeleton_ret1_def cyc_on_empty_def)
 
 lemma invar_cycle_false_holds_ret_2[invar_holds_intros]:
   "\<lbrakk>dc.DFS_skeleton_ret_2_conds dfs_state; invar_cycle_false dfs_state\<rbrakk> \<Longrightarrow> invar_cycle_false (dc.DFS_skeleton_ret2 dfs_state)"
-  by (simp add: dc.DFS_skeleton_ret2_def cyc_on_found_def invar_cycle_false_def)
+  by \<^marker>\<open>provenance ai_human\<close> (simp add: dc.DFS_skeleton_ret2_def cyc_on_found_def invar_cycle_false_def)
+
+provenance ai_human
 
 text \<open>Unlike the sibling invariants, the generic
   \<open>by (auto intro!: IH(2-) invar_holds_intros simp: \<dots>)\<close> script diverges here (the accumulated
   \<open>invar_holds_intros\<close>/\<open>invar_props_intros\<close> sets are much larger than the library's by this
   point), so the four skeleton cases are discharged by explicit rule application instead.\<close>
+provenance human
+
 lemma invar_cycle_false_holds[invar_holds_intros]:
   assumes "dc.DFS_skeleton_dom dfs_state" "dc.invar_1 dfs_state" "invar_fin dfs_state"
           "invar_ssf dfs_state" "invar_gray dfs_state" "invar_gray_stack dfs_state"
           "invar_finished_closed dfs_state" "invar_cycle_false dfs_state"
   shows "invar_cycle_false (dc.DFS_skeleton dfs_state)"
   using assms(2-)
-proof(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
+proof \<^marker>\<open>provenance ai_human\<close>(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
   case IH: (1 dfs_state)
   note simps = dc.DFS_skeleton_simps[OF IH(1)]
   show ?case
@@ -1255,6 +1303,8 @@ proof(induction rule: dc.DFS_skeleton_induct[OF assms(1)])
       using IH(4) by blast
   qed
 qed
+
+provenance ai_human
 
 text \<open>Completeness reports on \<open>finished\<close> rather than \<open>seen\<close>: the outer loop consumes exactly the
   finished region.\<close>

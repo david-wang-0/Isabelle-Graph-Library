@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Tracked_Aux_Equiv
   imports DFS_DirCycle_Linear_Aux DFS_DirCycle_Linear_Tracked_Aux
 begin
 
+provenance ai_human
+
 text \<open>The inner (pre-seeded) DFS of level 1 --- the \<^emph>\<open>tracked\<close> search of
   \<^theory>\<open>Directed_Cycle_DFS.DFS_DirCycle_Linear_Tracked_Aux\<close> --- against the inner DFS of
   level 0, the reference implementation of

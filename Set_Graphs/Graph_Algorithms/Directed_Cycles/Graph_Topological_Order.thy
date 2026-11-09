@@ -1,6 +1,8 @@
 theory Graph_Topological_Order
-  imports Directed_Set_Graphs.Awalk
+  imports Directed_Set_Graphs.Awalk AI_Provenance.Provenance
 begin
+
+provenance ai_human
 
 section \<open>Topological numbering of a directed graph\<close>
 

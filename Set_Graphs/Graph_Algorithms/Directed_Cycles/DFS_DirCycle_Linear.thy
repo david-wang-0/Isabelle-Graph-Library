@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear
   imports DFS_DirCycle_Linear_Aux
 begin
 
+provenance ai_human
+
 text \<open>The directed counterpart of \<open>DFS_Cycles\<close>: a whole-graph (linear) cycle search whose outer
   loop sweeps the vertices and calls a directed-cycle DFS --- the library's \<open>DFS_DirCycle\<close>
   extended with a pre-seeded initial state, \<^theory>\<open>Directed_Cycle_DFS.DFS_DirCycle_Linear_Aux\<close> ---
@@ -28,7 +30,11 @@ text \<open>The directed counterpart of \<open>DFS_Cycles\<close>: a whole-graph
 text \<open>\<open>DFS_Skeleton\<close> declares the \<open>call_cond_*\<close> / \<open>invar_*\<close> / \<open>ret_holds_intros\<close> bundles, but
   \<open>termination_intros\<close> is declared locally in \<open>DFS_Cycles\<close> (the outer loop is where termination is
   argued), so it must be declared here too.\<close>
+provenance human
+
 named_theorems termination_intros
+
+provenance ai_human
 
 record ('ver, 'vset) DFS_dircycle_linear_state = fin :: "'vset" cyc :: bool
 
@@ -41,8 +47,12 @@ fixes G::"'adjmap" and V::"'vset"
   and fin_aux::"'state \<Rightarrow> 'vset" and cycle_aux::"'state \<Rightarrow> bool"
 begin
 
+provenance human
+
 abbreviation "neighbourhood' \<equiv> Graph.neighbourhood G"
 notation "neighbourhood'" ("\<N>\<^sub>G _" 100)
+
+provenance ai_human
 
 text \<open>No symmetry and no loop-freeness: unlike \<open>DFS_Cycles_axioms\<close> this is a genuinely directed
   graph.\<close>
@@ -234,20 +244,28 @@ begin
 text \<open>\<open>DFS_Cycles\<close> makes the set-operation equations available to the automation inside its own
   \<open>includes\<close> context; without them nothing can reduce \<open>V -\<^sub>G fin st\<close>, and every
   \<open>force\<close>/\<open>auto\<close> over the unfinished region searches unboundedly instead of failing.\<close>
+provenance human
+
 declare set_ops.set_union[simp] set_ops.set_inter[simp]
         set_ops.set_diff[simp] set_ops.invar_union[simp]
         set_ops.invar_inter[simp] set_ops.invar_diff[simp]
+provenance ai_human
+
 lemma V_graph_verts: "t_set V = dVs (Graph.digraph_abs G)"
   using graph_axioms by (auto simp: DFS_dircycle_linear_axioms_def)
 
 lemma V_inv[simp, intro]: "vset_inv V"
   using graph_axioms by (auto simp: DFS_dircycle_linear_axioms_def)
 
+provenance human
+
 lemma graph_inv[simp, intro]:
   "Graph.graph_inv G"
   "Graph.finite_graph G"
   "Graph.finite_vsets G"
   using graph_axioms by (auto simp: DFS_dircycle_linear_axioms_def)
+
+provenance ai_human
 
 lemma finite_vertices[simp, intro]: "finite (dVs (Graph.digraph_abs G))"
   using Graph.finite_vertices[OF graph_inv(1,2,3)] .
@@ -386,10 +404,14 @@ lemma invar_cyc_true_holds_ret_2[invar_holds_intros]:
 
 subsection \<open>Termination\<close>
 
+provenance human
+
 definition "less_rel = {(x::nat, y::nat). x < y}"
 
 lemma wf_less_rel[intro!]: "wf less_rel"
   by(auto simp: less_rel_def wf_less)
+
+provenance ai_human
 
 text \<open>The measure drops because the inner call \<^emph>\<open>absorbs its root\<close> (export 5): the root was
   unfinished before the call and finished after it, while nothing already finished is lost

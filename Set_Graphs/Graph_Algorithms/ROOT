@@ -18,6 +18,8 @@ session "DFS_Skeletons" in DFS = "Directed_Set_Graphs" +
     directed-cycle detection in Directed_Cycle_DFS, or an external development such as a datalog
     foundedness check -- need not depend on Graph_Algorithms_Dev, which pulls in
     Verified_SAT_Based_AI_Planning, BFS and Bellman-Ford.\<close>
+  sessions
+    AI_Provenance
   theories
     DFS_Skeleton
     DFS_Skeleton_Refine
@@ -71,6 +73,8 @@ session "Directed_Cycle_DFS" in Directed_Cycles = "DFS_Skeletons" +
         supply, sel_cong -- that sel is determined by the element set -- because its clean-run
         lockstep hands sel vsets built by different operations; the outer sweep does not, since
         it selects from the very vset level 1 selects from.\<close>
+  sessions
+    AI_Provenance
   theories
     DFS_DirCycle
     Graph_Topological_Order
@@ -91,6 +95,7 @@ session "Graph_Algorithms_Dev" = "Directed_Set_Graphs" +
     Undirected_Set_Graphs
     DFS_Skeletons
     Directed_Cycle_DFS
+    AI_Provenance
   theories
     RBT_Map_Extension
     DFS

@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Aux
   imports DFS_DirCycle
 begin
 
+provenance ai_human
+
 text \<open>An \<^emph>\<open>extension\<close> of the graph library's directed-cycle detector \<^locale>\<open>DFS_dircycle\<close>
   (\<open>DFS_DirCycle\<close>): the same state, step functions and invariants, generalized from
   a \<^emph>\<open>fresh\<close> start to one \<^emph>\<open>pre-seeded\<close> with an already-processed region \<open>f\<close> --- a single run of
@@ -101,6 +103,8 @@ lemma linear_initial_fc[simp,intro]:
 
 subsection \<open>Soundness and completeness of the seeded run\<close>
 
+provenance human
+
 theorem DFS_dircycle_linear_sound:
   assumes "cycle (dc.DFS_skeleton dircycle_linear_initial_state)"
   shows "\<exists>c. Awalk_Defs.cycle (Graph.digraph_abs G) c"
@@ -111,6 +115,8 @@ proof -
        (auto simp: invar_cycle_true_def dircycle_linear_initial_state_def)
   thus ?thesis using assms by (auto elim!: invar_props_elims)
 qed
+
+provenance ai_human
 
 text \<open>Completeness reports on \<open>finished\<close> rather than \<open>seen\<close> (contrast the library's
   \<open>DFS_dircycle_complete\<close>): the outer loop consumes exactly the finished region.\<close>

@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Tracked
   imports DFS_DirCycle_Linear_Tracked_Aux
 begin
 
+provenance ai_human
+
 text \<open>The whole-graph (linear) directed-cycle search of
   \<open>DFS_dircycle_linear\<close>, rebuilt on the \<^emph>\<open>tracked\<close> inner DFS of
   \<^theory>\<open>Directed_Cycle_DFS.DFS_DirCycle_Linear_Tracked_Aux\<close>. The algorithm is the same sweep --- pick a
@@ -39,7 +41,11 @@ text \<open>\<^theory>\<open>DFS_Skeletons.DFS_Skeleton\<close> declares \<open>
   \<^locale>\<open>DFS_skeleton_thms\<close> (as \<open>DFS_Cycles\<close> does in the library), which scopes the attribute to
   that locale; at theory level it is undeclared. So, exactly as in \<open>DFS_dircycle_linear\<close>, the outer
   loop --- which is where termination is argued --- has to introduce it.\<close>
+provenance human
+
 named_theorems termination_intros
+
+provenance ai_human
 
 record ('ver, 'vset) DFS_dircycle_linear_tracked_state =
   sweep_fin   :: "'vset"
@@ -56,8 +62,12 @@ fixes G::"'adjmap" and V::"'vset"
   and cycle_aux::"'state \<Rightarrow> bool"
 begin
 
+provenance human
+
 abbreviation "neighbourhood' \<equiv> Graph.neighbourhood G"
 notation "neighbourhood'" ("\<N>\<^sub>G _" 100)
+
+provenance ai_human
 
 text \<open>As in \<open>DFS_dircycle_linear\<close>: a genuinely directed graph, no symmetry and no loop-freeness.
   \<open>V\<close> is still fixed, but only the initial state reads it.\<close>
@@ -274,9 +284,13 @@ begin
 text \<open>As in \<open>DFS_Cycles\<close> and \<open>DFS_dircycle_linear\<close>: without the set-operation equations the
   automation cannot reduce the vset operations and every \<open>force\<close>/\<open>auto\<close> over them searches
   unboundedly instead of failing.\<close>
+provenance human
+
 declare set_ops.set_union[simp] set_ops.set_inter[simp]
         set_ops.set_diff[simp] set_ops.invar_union[simp]
         set_ops.invar_inter[simp] set_ops.invar_diff[simp]
+
+provenance ai_human
 
 lemma V_graph_verts: "t_set V = dVs (Graph.digraph_abs G)"
   using graph_axioms by (auto simp: DFS_dircycle_linear_tracked_axioms_def)
@@ -284,11 +298,15 @@ lemma V_graph_verts: "t_set V = dVs (Graph.digraph_abs G)"
 lemma V_inv[simp, intro]: "vset_inv V"
   using graph_axioms by (auto simp: DFS_dircycle_linear_tracked_axioms_def)
 
+provenance human
+
 lemma graph_inv[simp, intro]:
   "Graph.graph_inv G"
   "Graph.finite_graph G"
   "Graph.finite_vsets G"
   using graph_axioms by (auto simp: DFS_dircycle_linear_tracked_axioms_def)
+
+provenance ai_human
 
 lemma finite_vertices[simp, intro]: "finite (dVs (Graph.digraph_abs G))"
   using Graph.finite_vertices[OF graph_inv(1,2,3)] .
@@ -468,10 +486,14 @@ lemma invar_cyc_true_holds_ret_2[invar_holds_intros]:
 
 subsection \<open>Termination\<close>
 
+provenance human
+
 definition "less_rel = {(x::nat, y::nat). x < y}"
 
 lemma wf_less_rel[intro!]: "wf less_rel"
   by(auto simp: less_rel_def wf_less)
+
+provenance ai_human
 
 text \<open>The measure drops because the inner call \<^emph>\<open>absorbs its root\<close> (export 5) while the finished
   region only grows (export 4) --- and by the partition the unfinished set is the exact complement

@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Tracked_Aux_Refine
   imports DFS_Skeletons.DFS_Skeleton_Refine_Unfin DFS_DirCycle_Linear_Tracked_Aux
 begin
 
+provenance ai_human
+
 text \<open>Level 2 of the refinement chain at the \<^emph>\<open>inner\<close> (pre-seeded) directed-cycle DFS: the
   instance of \<^locale>\<open>DFS_skeleton_refine_unfin\<close> that the tracked search of
   \<^theory>\<open>Directed_Cycle_DFS.DFS_DirCycle_Linear_Tracked_Aux\<close> becomes once the adjacency map moves into the

@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Tracked_Equiv
   imports DFS_DirCycle_Linear DFS_DirCycle_Linear_Tracked DFS_DirCycle_Linear_Tracked_Aux_Equiv
 begin
 
+provenance ai_human
+
 text \<open>Level 1 of the refinement chain --- the \<^emph>\<open>tracked\<close> directed-cycle search of
   \<open>DFS_dircycle_linear_tracked\<close> --- against level 0, \<open>DFS_dircycle_linear\<close> on the
   skeleton, at the level of the outer sweeps. The inner searches are compared step for step in

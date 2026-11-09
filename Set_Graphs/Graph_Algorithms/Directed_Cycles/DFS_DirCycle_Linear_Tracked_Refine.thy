@@ -2,6 +2,8 @@ theory DFS_DirCycle_Linear_Tracked_Refine
   imports DFS_DirCycle_Linear_Tracked DFS_DirCycle_Linear_Tracked_Aux_Refine
 begin
 
+provenance ai_human
+
 text \<open>Level 2 of the refinement chain at the \<^emph>\<open>outer\<close> (whole-graph) sweep --- the companion of
   \<^theory>\<open>Directed_Cycle_DFS.DFS_DirCycle_Linear_Tracked_Aux_Refine\<close>, which refines the inner
   (pre-seeded) DFS. The inner search of level 2 carries the adjacency map in its state and prunes
